@@ -19,7 +19,6 @@ public class ArrayIntegerListConstants {
     public static int ZERO_INDEX = 0;
     public static int FIRST_INDEX = 1;
     public static int SECOND_INDEX = 2;
-    public static int THIRD_INDEX = 3;
 
     public static int RETURN_VALUE_IF_ITEM_NOT_FOUND = -1;
 

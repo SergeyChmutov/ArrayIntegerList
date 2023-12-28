@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class SortComparison {
-    static final int CAPACITY = 300_000;
+    static final int NUMBERS_COUNT = 100_000;
 
     public static void main(String[] args) {
-        Integer[] numbersForBubbleSort = getRandomArrayOfIntegerNumbers(CAPACITY);
+        Integer[] numbersForBubbleSort = getRandomArrayOfIntegerNumbers(NUMBERS_COUNT);
         Integer[] copyNumbersForSelectionSort = Arrays.copyOf(numbersForBubbleSort, numbersForBubbleSort.length);
         Integer[] copyNumbersForInsertionSort = Arrays.copyOf(numbersForBubbleSort, numbersForBubbleSort.length);
 
