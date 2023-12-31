@@ -10,17 +10,22 @@ public class SortComparison {
         Integer[] numbersForBubbleSort = getRandomArrayOfIntegerNumbers(NUMBERS_COUNT);
         Integer[] copyNumbersForSelectionSort = Arrays.copyOf(numbersForBubbleSort, numbersForBubbleSort.length);
         Integer[] copyNumbersForInsertionSort = Arrays.copyOf(numbersForBubbleSort, numbersForBubbleSort.length);
+        Integer[] copyNumbersForQuickSort = Arrays.copyOf(numbersForBubbleSort, numbersForBubbleSort.length);
+        Integer[] copyNumbersForMergeSort = Arrays.copyOf(numbersForBubbleSort, numbersForBubbleSort.length);
 
         testBubbleSortMethod(numbersForBubbleSort);
+
         testSelectionSortMethod(copyNumbersForSelectionSort);
         testInsertionSortMethod(copyNumbersForInsertionSort);
+        testQuickSortMethod(copyNumbersForQuickSort);
+        testMergeSortMethod(copyNumbersForMergeSort);
     }
 
     private static Integer[] getRandomArrayOfIntegerNumbers(int numbersCount) {
         Integer[] result = new Integer[numbersCount];
         Random random = new Random();
         for (int i = 0; i < result.length; i++) {
-            result[i] = random.nextInt(-50, 51);
+            result[i] = random.nextInt(-numbersCount, numbersCount + 1);
         }
         return result;
     }
@@ -45,6 +50,22 @@ public class SortComparison {
         System.out.print("Сортировка вставкой: ");
         long start = System.currentTimeMillis();
         sortInsertion(arr);
+        long end = System.currentTimeMillis();
+        System.out.println((end - start) + " ms.");
+    }
+
+    private static void testQuickSortMethod(Integer[] arr) {
+        System.out.print("Быстрая сортировка: ");
+        long start = System.currentTimeMillis();
+        quickSort(arr, 0, arr.length - 1);
+        long end = System.currentTimeMillis();
+        System.out.println((end - start) + " ms.");
+    }
+
+    private static void testMergeSortMethod(Integer[] arr) {
+        System.out.print("Сортировка слиянием: ");
+        long start = System.currentTimeMillis();
+        mergeSort(arr);
         long end = System.currentTimeMillis();
         System.out.println((end - start) + " ms.");
     }
@@ -86,6 +107,72 @@ public class SortComparison {
                 j--;
             }
             arr[j] = temp;
+        }
+    }
+
+    private static void quickSort(Integer[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+
+            quickSort(arr, begin, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, end);
+        }
+    }
+
+    private static int partition(Integer[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+
+                swapElements(arr, i, j);
+            }
+        }
+
+        swapElements(arr, i + 1, end);
+        return i + 1;
+    }
+
+    private static void mergeSort(Integer[] arr) {
+        if (arr.length < 2) {
+            return;
+        }
+        int mid = arr.length / 2;
+        Integer[] left = new Integer[mid];
+        Integer[] right = new Integer[arr.length - mid];
+
+        for (int i = 0; i < left.length; i++) {
+            left[i] = arr[i];
+        }
+
+        for (int i = 0; i < right.length; i++) {
+            right[i] = arr[mid + i];
+        }
+
+        mergeSort(left);
+        mergeSort(right);
+
+        merge(arr, left, right);
+    }
+
+    private static void merge(Integer[] arr, Integer[] left, Integer[] right) {
+        int mainP = 0;
+        int leftP = 0;
+        int rightP = 0;
+        while (leftP < left.length && rightP < right.length) {
+            if (left[leftP] <= right[rightP]) {
+                arr[mainP++] = left[leftP++];
+            } else {
+                arr[mainP++] = right[rightP++];
+            }
+        }
+        while (leftP < left.length) {
+            arr[mainP++] = left[leftP++];
+        }
+        while (rightP < right.length) {
+            arr[mainP++] = right[rightP++];
         }
     }
 }

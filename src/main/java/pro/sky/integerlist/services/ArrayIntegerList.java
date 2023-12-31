@@ -80,7 +80,7 @@ public class ArrayIntegerList implements IntegerList {
     public boolean contains(Integer item) {
         checkParameterForNull(item);
         Integer[] items = toArray();
-        sortInsertion(items);
+        quickSort(items, 0, items.length - 1);
         return binarySearchIteratively(items, item,0, items.length - 1) != -1;
     }
 
@@ -164,11 +164,11 @@ public class ArrayIntegerList implements IntegerList {
 
     private void rearrangeStorageIfNeeded() {
         if (storage.length == size) {
-            rearrangeStorage();
+            grow();
         }
     }
 
-    private void rearrangeStorage() {
+    private void grow() {
         int newStorageLength = (size * 3) / 2 + 1;
         Integer[] newStorage = new Integer[newStorageLength];
         System.arraycopy(storage, 0, newStorage, 0, size);
@@ -199,16 +199,35 @@ public class ArrayIntegerList implements IntegerList {
         storage[size] = null;
     }
 
-    private void sortInsertion(Integer[] arr) {
-        for (int i = 1; i < arr.length; i++) {
-            Integer temp = arr[i];
-            int j = i;
-            while (j > 0 && arr[j - 1] >= temp) {
-                arr[j] = arr[j - 1];
-                j--;
-            }
-            arr[j] = temp;
+    private void swapElements(Integer[] arr, int left, int right) {
+        Integer temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
+    }
+
+    private void quickSort(Integer[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+
+            quickSort(arr, begin, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, end);
         }
+    }
+
+    private int partition(Integer[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+
+                swapElements(arr, i, j);
+            }
+        }
+
+        swapElements(arr, i + 1, end);
+        return i + 1;
     }
 
     private int binarySearchIteratively(Integer[] sortedArray, int item, int leftIndex, int rightIndex) {
